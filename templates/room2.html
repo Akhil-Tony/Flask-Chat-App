@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% block head %}
+<title>Chat Room</title>
+<style>
+</style>
+{% endblock %}
+
+{% block bg %}
+<body style="background-color:#65969b"></body>
+{% endblock %}
+
+{% block body %}
+<br>
+<div id="page">
+<div class="container" id="chatbox" style="color: #ffffff;"></div>
+
+    <div class="input-group mb-3 fixed-bottom container" style="bottom: 7%;">
+        <input type="text" class="form-control" id="chat-msg"
+         placeholder="Message" >
+        <div class="input-group-append">
+          <button class="btn btn-outline-secondary" onclick="sendMessage()"
+           type="button" style="background-color: bisque;">Sent</button>
+        </div>
+    </div>
+<br><br><br><br><br>
+
+</div>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
+<script>
+    var user = '<font size="5px">{{face[0]}}</font>';
+ 	socket = io()
+	function sendMessage () {
+        var d = new Date(); 
+        time = d.getHours() + ':' +d.getMinutes();  
+        time = '<small>'+time+'</small>'
+        
+        var sms = time+'<p>'+user+' '+document.getElementById("chat-msg").value+'</p>'
+		document.getElementById("chat-msg").value = '';
+
+        socket.emit("message",sms)
+	}
+	socket.on("new_message",(data)=>{
+        addContent(data)
+	})
+
+    function addContent(content) {
+    var chatbox = document.getElementById("chatbox");
+    if(content!=''){
+    chatbox.innerHTML +='<small>'+content+"</small><hr>";
+    }
+    $(document).scrollTop($(document).height()); 
+
+}
+
+</script>
+
+{% endblock %}

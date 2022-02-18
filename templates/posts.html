@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block head %}
+<title>Yen Blog</title>
+{% endblock %}
+
+{% block body %}
+        <br>        
+        <div>
+            <a style='display: inline' class='btn btn-success float-right'
+             href='/posts/new'>New Post</a>
+            <h1 class="text-muted" style='display: inline; font-family: monospace; font-size: 20px;
+            '>YOUR TOPICS</h1>      
+        </div>
+        <br>
+        <hr>
+
+        {% for post in posts %}
+
+        <div class="container" style="border-radius: 25px; 
+        background-color: rgb(250, 235, 240);">
+            {% if post.posted_by %}
+            <small>{{post.posted_by}} on {{post.posted_on}}</small>
+            {% else %}
+            <small>Anonymous on {{post.posted_on}}</small>
+            {% endif %}
+            <h2 style="font-family: cursive;">{{post.title}}</h2>
+            <p style='white-space: pre-wrap'>{{post.content[:100]}} ....</p>
+          
+          {% if post.author_id == user.id %}
+          <div class="d-flex justify-content-between">
+              <a href="/posts/edit/{{post.id}}">edit</a>
+            <a href="/read_post/{{post.id}}">open post</a>
+          </div>
+          {% else %}
+          <div align="right"><a href="/read_post/{{post.id}}">open post</a></div>
+          {% endif %}
+          <hr>
+          </div>
+        {% endfor %}
+        <br><br><br>
+{% endblock %}
+

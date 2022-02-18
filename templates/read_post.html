@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% block head %}
+<style>
+    .read_div {
+        background-color: burlywood;
+        border-radius: 20px; 
+    }
+</style>
+<title>Yen Read</title>
+{% endblock %}
+
+{% block body %}
+
+<div id="your_div">
+
+<figure class="text-center">
+    <blockquote class="blockquote">
+        <h1 class='heading' align="center" style="color :brown">{{post.title}}</h1>
+    </blockquote>
+    <figcaption class="blockquote-footer">
+        {% if post.posted_by %}
+        <small>Written By {{post.posted_by}} on {{post.posted_on}}</small>
+        {% else %}
+        <small>Written by Anonymous on {{post.posted_on}}</small>
+        {% endif %}
+    </figcaption>
+  </figure>
+
+<div class="read_div" align="center">   
+<p style='font-size:24px'><em>{{post.content}}</em></p></div>
+<div align="center">Comments</div>
+
+
+<div class="container px-4" style="background-color:bisque">
+{% for comment in post.comments %}
+<div class="d-flex justify-content-between align-items-center">
+<small class="text-mutedq">{{comment.user.username}} : </small>
+<small class="text-mutedq">{{comment.text}}</small>
+<small class="text-mutedq">{{comment.created_time}}</small>
+</div>
+{% endfor %}
+<br>
+    <form class="input-group mb-3" method="POST" action="/create-comment/{{post.id}}">
+      <input type="text" id="text" name="text" class="form-control" 
+      placeholder="comment something"/>
+      <button type="submit" class="btn btn-primary">Comment</button>
+    </form> </div>
+
+<div align='center'><a href="/posts">
+    <button type="click" class="btn btn-secondary">back</button></a></div>
+</div>
+<br><br><br>
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block head %}
+<title>Edit Page</title>
+{% endblock %}
+{% block body %}
+<hr>
+        <h2 align="center">Edit Post</h2>
+        <form action='/posts/edit/{{post.id}}' method='POST'>
+            <label for='content'>Title</label>
+            <input class='form-control' type='text' name='title' id='title'
+             value='{{post.title}}'>
+            <br>
+            <label for='content'>Content</label>
+            <textarea class='form-control' id='post' name='post' 
+            rows='3'>{{post.content}}</textarea>
+            <br>
+            <input type="checkbox" id="anonymous" name="anonymous" value=1>
+            <label for="anonymous">Anonymous Post</label>
+            <div align="center">
+            <button type='submit' class="btn btn-secondary">Save</button>
+            </div>
+        </form>
+        <hr>
+{% endblock %}

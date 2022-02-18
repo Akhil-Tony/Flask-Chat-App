@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block head %}
+<title>Door</title>
+<style>
+    .ft{
+        width: 13%;
+    }
+</style>
+{% endblock %}
+{% block bg %}
+<body style="background-color: #c4e2ff;">
+{% endblock %}
+{% block body %}
+<div class="container" align="center">
+    <h2 style="font-family: cursive;">Yen Room</h2>
+    <p style="font-style: italic;">Anonymous, Secure and Safe</p>
+    <br><br><br>
+    <form action="/door" method="POST">
+        <div align="center">
+        <label for="face">Select an emoji for you face😎</label>
+        <input class='ft form-control' type="text" size="1" name="face" value="🎅"><br>
+        <input type="submit" class="btn btn-secondary btn-sm" value="chat"> </div>
+    </form>
+    <br><br><br>
+    <div class='container' align="right"><a href='/room_invite'>
+        <input type="submit" class="btn btn-warning btn-sm" value="post invite"></a>
+    </div>
+</div>
+{% endblock %}
