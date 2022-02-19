@@ -73,7 +73,8 @@ def door():
         else:
             return redirect('/room/'+face)
     else:
-        return render_template('door.html',user=current_user)
+        global total_users
+        return render_template('door.html',user=current_user,total_online=total_users)
 
 @app.route('/room/<face>')
 def room(face):
@@ -82,6 +83,18 @@ def room(face):
 @socketio.on("message")
 def handleMessage(data):
     emit('new_message',data,broadcast=True)
+
+total_users = 0
+
+@socketio.on('connect')
+def test_connect():
+    global total_users 
+    total_users += 1
+
+@socketio.on('disconnect')
+def test_disconnect():
+    global total_users
+    total_users -= 1
 #
 
 @app.route('/')
