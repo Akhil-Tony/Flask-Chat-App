@@ -19,9 +19,9 @@
         <div class="container" style="border-radius: 25px; 
         background-color: rgb(250, 235, 240);">
             {% if post.posted_by %}
-            <small>{{post.posted_by}} on {{post.posted_on}}</small>
+            <small class='text-muted'>{{post.posted_by}} on {{post.posted_on}}</small>
             {% else %}
-            <small>Anonymous on {{post.posted_on}}</small>
+            <small class='text-muted'>Anonymous on {{post.posted_on}}</small>
             {% endif %}
             <h2 style="font-family: cursive;">{{post.title}}</h2>
             <p style='white-space: pre-wrap'>{{post.content[:100]}} ....</p>
