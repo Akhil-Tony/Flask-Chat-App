@@ -15,8 +15,9 @@ python-socketio==4.6.0
 SQLAlchemy==1.4.31
 Werkzeug==2.0.3
 wincertstore==0.2
-gunicorn
 psycopg2
 
-eventlet
 gevent-websocket
+
+gunicorn==20.1.0 
+eventlet==0.30.2
