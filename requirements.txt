@@ -17,3 +17,6 @@ Werkzeug==2.0.3
 wincertstore==0.2
 gunicorn
 psycopg2
+
+eventlet
+gevent-websocket
