@@ -38,10 +38,9 @@
         
         var sms = time+'<p>'+user+' '+document.getElementById("chat-msg").value+'</p>'
 	
-	socket.emit("message",sms)
 	document.getElementById("chat-msg").value = '';
 
-//         socket.emit("message",sms)
+        socket.emit("message",sms)
 	}
 	socket.on("new_message",(data)=>{
         addContent(data)
