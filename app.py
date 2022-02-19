@@ -9,7 +9,7 @@ from flask_login import current_user,login_user,logout_user
 from flask_login import LoginManager,login_required
 from werkzeug.security import generate_password_hash,check_password_hash
 #
-from flask_socketio import SocketIO,emit,sent
+from flask_socketio import SocketIO,emit
 #
 app = Flask(__name__)
 socketio = SocketIO(app)  
