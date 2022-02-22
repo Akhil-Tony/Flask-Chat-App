@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% block head %}
 <title>Yen Blog</title>
+<script src="https://kit.fontawesome.com/73151e71f5.js" crossorigin="anonymous"></script>
 {% endblock %}
 
 {% block body %}
@@ -24,19 +25,50 @@
             <small class='text-muted'>Anonymous on {{post.posted_on}}</small>
             {% endif %}
             <h2 style="font-family: cursive;">{{post.title}}</h2>
-            <p style='white-space: pre-wrap'>{{post.content[:100]}} ....</p>
+            <p style='white-space: pre-wrap'>{{post.content[:100]}}
+                {% if post.content[100] %}....more{% endif %}</p>
+          {% if post.id in post.likes|map(attribute='user_id')|list %}
+              {% set cname = "fa-solid fa-champagne-glasses" %}
+              {% else %}
+              {% set cname = "fa-solid fa-wine-glass" %}
+              {% endif %}
           
-          {% if post.author_id == user.id %}
           <div class="d-flex justify-content-between">
+            {% if post.author_id == user.id %}
               <a href="/posts/edit/{{post.id}}">edit</a>
+            {% else %}
+              <span></span>
+            {% endif %}
             <a href="/read_post/{{post.id}}">open post</a>
+            <div><i id='like_button-{{post.id}}' class='{{cname}}' 
+              onclick="like('{{post.id|int}}')">
+            </i><span id="like_count-{{post.id}}">{{post.likes|length}}</span></div>
           </div>
-          {% else %}
-          <div align="right"><a href="/read_post/{{post.id}}">open post</a></div>
-          {% endif %}
+                
           <hr>
           </div>
         {% endfor %}
         <br><br><br>
+
+        <script type="text/javascript">
+
+          function like(postId){
+            const likecount = document.getElementById('like_count-'+postId);
+            const likebutton = document.getElementById('like_button-'+postId);
+            fetch("/like/"+postId,{method:'POST'})
+            .then((res)=>res.json())
+            .then((data)=>{
+              likecount.innerHTML=data['likes'];
+              if(data['liked'] === true){
+                likebutton.className = "fa-solid fa-champagne-glasses";
+              }
+              else{
+                likebutton.className = "fa-solid fa-wine-glass";
+              }
+            });
+            
+          }
+        
+        </script>
 {% endblock %}
 
