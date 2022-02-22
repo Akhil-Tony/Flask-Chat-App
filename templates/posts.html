@@ -38,7 +38,7 @@
               <a href="/posts/edit/{{post.id}}">edit</a>
             {% endif %}
             <a href="/read_post/{{post.id}}">open post</a>
-            <div><i id='like_button-{{post.id}}' class='{{cname}}' 
+            <div><i id='like_button-{{post.id}}' class='{{cname}}' style="color:red;"
               onclick="like('{{post.id|int}}')">
             </i><span id="like_count-{{post.id}}">{{post.likes|length}}</span></div>
           </div>
