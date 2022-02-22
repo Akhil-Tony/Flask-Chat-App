@@ -36,7 +36,7 @@
 <div class="d-flex justify-content-between align-items-center">
 <small class="text-mutedq">{{comment.user.username}} : </small>
 <small class="text-mutedq">{{comment.text}}</small>
-<small class="text-mutedq">{{comment.created_time}}</small>
+<small class="text-mutedq">{{comment.created_time.date()}}</small>
 </div>
 {% endfor %}
 <br>
