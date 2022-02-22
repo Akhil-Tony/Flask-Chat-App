@@ -36,8 +36,6 @@
           <div class="d-flex justify-content-between">
             {% if post.author_id == user.id %}
               <a href="/posts/edit/{{post.id}}">edit</a>
-            {% else %}
-              <span></span>
             {% endif %}
             <a href="/read_post/{{post.id}}">open post</a>
             <div><i id='like_button-{{post.id}}' class='{{cname}}' 
