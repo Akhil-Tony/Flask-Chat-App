@@ -2,8 +2,8 @@ import os
 from flask import Flask, redirect,request, url_for
 from flask import render_template
 from flask_sqlalchemy import SQLAlchemy
-from flask import flash
-from sqlalchemy.sql import func
+from flask import flash,jsonify
+from datetime import datetime
 from flask_login import UserMixin
 from flask_login import current_user,login_user,logout_user
 from flask_login import LoginManager,login_required
@@ -38,7 +38,7 @@ class User(db.Model,UserMixin):
     id = db.Column(db.Integer,primary_key=True)
     username = db.Column(db.String(150),nullable=False,unique=True)
     password = db.Column(db.String(150),nullable=False)
-    date_created = db.Column(db.DateTime(timezone=True),default=func.now())
+    date_created = db.Column(db.DateTime,default=datetime.now())
     posts = db.relationship('blog_post',backref='user',passive_deletes=True)
     comments = db.relationship('comment',backref='user',passive_deletes=True)
 
@@ -47,19 +47,29 @@ class blog_post(db.Model):
     title = db.Column(db.String(100),nullable=False)
     content = db.Column(db.Text,nullable=False)
     posted_by = db.Column(db.String(20),nullable=True) #,default='N/A'
-    posted_on = db.Column(db.DateTime(timezone=True),nullable=False,default=func.now())
+    posted_on = db.Column(db.DateTime,nullable=False,default=datetime.now())
     author_id = db.Column(db.Integer,db.ForeignKey('user.id',ondelete='CASCADE')
     ,nullable=False) 
     comments = db.relationship('comment',backref='blog_post',passive_deletes=True)
+    likes = db.relationship('like',backref='blog_post',passive_deletes=True)
 
 class comment(db.Model):
     id = db.Column(db.Integer,primary_key=True)
     text = db.Column(db.Text,nullable=False)
-    created_time = db.Column(db.DateTime(timezone=True),nullable=False,default=func.now())
+    created_time = db.Column(db.DateTime,nullable=False,default=datetime.now())
     blog_id = db.Column(db.Integer,db.ForeignKey('blog_post.id',ondelete='CASCADE'),
     nullable=False)
     author_id = db.Column(db.Integer,db.ForeignKey('user.id',ondelete='CASCADE'),
     nullable=False) 
+    
+class like(db.Model):
+    id = db.Column(db.Integer,primary_key=True)
+    blog_id = db.Column(db.Integer,db.ForeignKey('blog_post.id',ondelete='CASCADE'),
+    nullable=False)
+    user_id = db.Column(db.Integer,db.ForeignKey('user.id',ondelete='CASCADE'),
+    nullable=False)
+    time = db.Column(db.DateTime,default=datetime.now())
+
 
 #
 @app.route('/door',methods=['GET','POST'])
@@ -256,6 +266,25 @@ def room_invite():
     posted_by=current_user.username)
     return render_template('room_invite.html',post=invite,user=current_user)
 
+@app.route('/like/<b_id>',methods=['GET','POST'])
+@login_required
+def liked(b_id):
+    print('i got the post id',b_id)
+    post = blog_post.query.filter_by(id=b_id).first()
+    liked = like.query.filter_by(user_id=current_user.id,blog_id=b_id).first()
+    if not post:
+        return jsonify({'error':'post does not exist.'},400)
+    elif liked:
+        db.session.delete(liked)
+        db.session.commit()
+    else :
+        new_like = like(user_id=current_user.id,blog_id=b_id)
+        db.session.add(new_like)
+        db.session.commit()
+
+    return jsonify({'likes':len(post.likes),
+    'liked':current_user.id in map( lambda x:x.user_id,post.likes)})
+   
 
 if __name__ == "__main__":
     socketio.run(app)
