@@ -27,7 +27,7 @@
             <h2 style="font-family: cursive;">{{post.title}}</h2>
             <p style='white-space: pre-wrap'>{{post.content[:100]}}
                 {% if post.content[100] %}....more{% endif %}</p>
-          {% if post.id in post.likes|map(attribute='user_id')|list %}
+          {% if user.id in post.likes|map(attribute='user_id')|list %}
               {% set cname = "fa-solid fa-champagne-glasses" %}
               {% else %}
               {% set cname = "fa-solid fa-wine-glass" %}
