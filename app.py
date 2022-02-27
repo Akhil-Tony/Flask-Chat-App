@@ -3,7 +3,8 @@ from flask import Flask, redirect,request, url_for
 from flask import render_template
 from flask_sqlalchemy import SQLAlchemy
 from flask import flash,jsonify
-from datetime import datetime,timedelta
+from datetime import timedelta
+from sqlalchemy.sql import func
 from flask_login import UserMixin
 from flask_login import current_user,login_user,logout_user
 from flask_login import LoginManager,login_required
@@ -38,7 +39,7 @@ class User(db.Model,UserMixin):
     id = db.Column(db.Integer,primary_key=True)
     username = db.Column(db.String(150),nullable=False,unique=True)
     password = db.Column(db.String(150),nullable=False)
-    date_created = db.Column(db.DateTime,default=datetime.now()+timedelta(hours=5,minutes=30))
+    date_created = db.Column(db.DateTime,default=func.now()+timedelta(hours=5,minutes=30))
     posts = db.relationship('blog_post',backref='user',passive_deletes=True)
     comments = db.relationship('comment',backref='user',passive_deletes=True)
 
@@ -47,7 +48,7 @@ class blog_post(db.Model):
     title = db.Column(db.String(100),nullable=False)
     content = db.Column(db.Text,nullable=False)
     posted_by = db.Column(db.String(20),nullable=True) #,default='N/A'
-    posted_on = db.Column(db.DateTime,nullable=False,default=datetime.now()+timedelta(hours=5,minutes=30))
+    posted_on = db.Column(db.DateTime,nullable=False,default=func.now()+timedelta(hours=5,minutes=30))
     author_id = db.Column(db.Integer,db.ForeignKey('user.id',ondelete='CASCADE')
     ,nullable=False) 
     comments = db.relationship('comment',backref='blog_post',passive_deletes=True)
@@ -56,7 +57,7 @@ class blog_post(db.Model):
 class comment(db.Model):
     id = db.Column(db.Integer,primary_key=True)
     text = db.Column(db.Text,nullable=False)
-    created_time = db.Column(db.DateTime,nullable=False,default=datetime.now()+timedelta(hours=5,minutes=30))
+    created_time = db.Column(db.DateTime,nullable=False,default=func.now()+timedelta(hours=5,minutes=30))
     blog_id = db.Column(db.Integer,db.ForeignKey('blog_post.id',ondelete='CASCADE'),
     nullable=False)
     author_id = db.Column(db.Integer,db.ForeignKey('user.id',ondelete='CASCADE'),
@@ -68,7 +69,7 @@ class like(db.Model):
     nullable=False)
     user_id = db.Column(db.Integer,db.ForeignKey('user.id',ondelete='CASCADE'),
     nullable=False)
-    time = db.Column(db.DateTime,default=datetime.now()+timedelta(hours=5,minutes=30))
+    time = db.Column(db.DateTime,default=func.now()+timedelta(hours=5,minutes=30))
 
 
 #
